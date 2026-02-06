@@ -1,21 +1,21 @@
-package com.metrowatch.app.util
+package com.metrowatch.app.infrastructure
 
 import com.metrowatch.app.config.AppConfig
 import com.metrowatch.app.config.AwsConfig
 import com.metrowatch.app.domain.ConfigVersionModel
-import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse
 import java.time.format.DateTimeFormatter
 
 @Singleton
-class S3Provider(
-    val awsConfig: AwsConfig,
-    val appConfig: AppConfig
-) {
+class S3ConfigStorage(
+    private val awsConfig: AwsConfig,
+    private val appConfig: AppConfig
+) : ConfigStorage {
 
     val client: S3Client = S3Client.builder().region(
         Region.of(awsConfig.region)
@@ -24,7 +24,7 @@ class S3Provider(
     @Volatile private var cachedConfig: String? = null
     @Volatile private var cachedVersionId: String? = null
 
-    fun getVersion(): ConfigVersionModel {
+    override fun getVersion(): ConfigVersionModel {
         val head = client.headObject(
             HeadObjectRequest.builder()
                 .bucket(appConfig.bucket)
@@ -39,7 +39,7 @@ class S3Provider(
         )
     }
 
-    fun getConfig(): Pair<String, ConfigVersionModel> {
+    override fun getConfig(): Pair<String, ConfigVersionModel> {
         val head = client.headObject(
             HeadObjectRequest.builder()
                 .bucket(appConfig.bucket)
@@ -63,7 +63,7 @@ class S3Provider(
     }
 
     private fun toVersion(
-        head: software.amazon.awssdk.services.s3.model.HeadObjectResponse
+        head: HeadObjectResponse
     ) = ConfigVersionModel(
         versionName = head.versionId() ?: "unknown",
         lastUpdated = DateTimeFormatter.ISO_INSTANT.format(

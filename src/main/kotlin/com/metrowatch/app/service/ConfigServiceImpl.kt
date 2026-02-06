@@ -4,12 +4,13 @@ import com.metrowatch.app.domain.ConfigMapper
 import com.metrowatch.app.domain.ConfigVersionMapper
 import com.metrowatch.app.dto.ConfigDto
 import com.metrowatch.app.dto.ConfigVersionDto
-import com.metrowatch.app.util.S3Provider
+import com.metrowatch.app.infrastructure.ConfigStorage
+import com.metrowatch.app.infrastructure.S3ConfigStorage
 import jakarta.inject.Singleton
 
 @Singleton
 class ConfigServiceImpl(
-    val s3Provider: S3Provider
+    val s3Provider: ConfigStorage
 ) : ConfigService {
 
     override fun getVersion(): ConfigVersionDto {
