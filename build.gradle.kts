@@ -22,6 +22,10 @@ dependencies {
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("io.micronaut:micronaut-http-server-netty")
+    //implementation("io.micronaut.aws:micronaut-aws-lambda-events")
+    implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
+    implementation("software.amazon.awssdk:s3")
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -34,8 +38,15 @@ application {
     mainClass = "com.metrowatch.app.ApplicationKt"
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("21")
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
+
+kotlin {
+    jvmToolchain(17)
+}
+
 
 
 graalvmNative.toolchainDetection = false
@@ -63,7 +74,7 @@ micronaut {
 
 
 tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
-    jdkVersion = "21"
+    jdkVersion = "17"
 }
 
 
