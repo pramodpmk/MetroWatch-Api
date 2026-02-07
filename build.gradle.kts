@@ -23,6 +23,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("io.micronaut:micronaut-http-server-netty")
+    implementation("io.micronaut.aws:micronaut-function-aws-api-proxy")
     //implementation("io.micronaut.aws:micronaut-aws-lambda-events")
     implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
     implementation("software.amazon.awssdk:s3")
