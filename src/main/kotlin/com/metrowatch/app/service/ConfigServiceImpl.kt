@@ -4,6 +4,7 @@ import com.metrowatch.app.domain.ConfigMapper
 import com.metrowatch.app.domain.ConfigVersionMapper
 import com.metrowatch.app.dto.ConfigDto
 import com.metrowatch.app.dto.ConfigVersionDto
+import com.metrowatch.app.error.S3ReadInterruptedException
 import com.metrowatch.app.infrastructure.ConfigStorage
 import com.metrowatch.app.infrastructure.S3ConfigStorage
 import jakarta.inject.Singleton
@@ -20,7 +21,7 @@ class ConfigServiceImpl(
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            throw Exception("Reading from S3 interrupted")
+            throw S3ReadInterruptedException("Reading from S3 interrupted")
         }
         return versionResult
     }
@@ -32,7 +33,7 @@ class ConfigServiceImpl(
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            throw Exception("Reading from S3 interrupted")
+            throw S3ReadInterruptedException("Reading from S3 interrupted")
         }
         return versionResult
     }
